@@ -1,5 +1,7 @@
 __author__ = 'François Gouet; Paul Ecoffet'
 
+from game.samegame import SameGame
+
 
 class Answer:
     """
@@ -82,7 +84,19 @@ class TerminalInterface():
         return answers[int_response - 1].value
 
     def new_game(self):
-        pass
+        self.game.new_game(5, 5)
+        while(self.game.not_finished):
+            self.disp_board(self.game.board)
+            self.ask_cell(5, 5)
+
+    def disp_board(self, board):
+        for line in board:
+            for cell in line:
+                print(cell, end="")
+            print()
+
+    def ask_cell(self, nb_col, nb_line):
+        a = input(">")
 
     def load_game(self):
         pass
