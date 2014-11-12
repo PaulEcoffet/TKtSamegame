@@ -1,6 +1,7 @@
 __author__ = 'François Gouet; Paul Ecoffet'
 
 from game.samegame import SameGame
+import string
 
 class Answer:
     """
@@ -84,19 +85,24 @@ class TerminalInterface():
     def new_game(self):
         nb_line, nb_col, nb_colors = self.ask_set_up_game()
         self.game.new_game(nb_col, nb_line, nb_colors)
-        while(self.game.not_finished):
-            self.disp_board(self.game.board)
-            self.ask_cell(5, 5)
+        #while(self.game.not_finished):
+        self.disp_board()
 
-    def disp_board(self, board):
-        for line in board:
-            for cell in line:
-                print(cell, end="")
+    def disp_board(self):
+        for valeur in string.ascii_uppercase[:self.game.nb_col]:
+            print ("   "+valeur+" ",end="")
+        print()
+        for i,line in enumerate(self.game.board):
+            print(" "+" " + "+" + "---+" * self.game.nb_col,end="")
             print()
-
-    def ask_cell(self, nb_col, nb_line):
-        a = input(">")
-        print(a)
+            print(str(i+1) + " | ",end="")
+            for cell in line:
+                print(cell+" | ", end="")
+            print()
+        print("  +" + "---+" * self.game.nb_col)
+        for valeur in string.ascii_uppercase[:self.game.nb_col]:
+            print ("   "+valeur+" ",end="")
+        print()
 
     def ask_set_up_game(self):
         """
