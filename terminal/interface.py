@@ -2,7 +2,6 @@ __author__ = 'François Gouet; Paul Ecoffet'
 
 from game.samegame import SameGame
 
-
 class Answer:
     """
     Lie une réponse à une action ou une valeur, utilisée par la fonction ask
@@ -10,7 +9,6 @@ class Answer:
     def __init__(self, value, text):
         self.value = value
         self.text = text
-
 
 class TerminalInterface():
     """
@@ -84,7 +82,8 @@ class TerminalInterface():
         return answers[int_response - 1].value
 
     def new_game(self):
-        self.game.new_game(5, 5)
+        nb_line, nb_col, nb_colors = self.ask_set_up_game()
+        self.game.new_game(nb_col, nb_line, nb_colors)
         while(self.game.not_finished):
             self.disp_board(self.game.board)
             self.ask_cell(5, 5)
@@ -98,6 +97,30 @@ class TerminalInterface():
     def ask_cell(self, nb_col, nb_line):
         a = input(">")
         print(a)
+
+    def ask_set_up_game(self):
+        """
+        Demande à l'utilisateur le nombre de cases et le nombre de couleurs
+        Tant que sa réponse n'est pas un entier recommencer
+        """
+        nombres = ['nombre ligne','nombre de colonnes','nombre de couleur']
+        param = [0,0,0]
+        well_answered = False
+        i = 0
+        while not well_answered or i != len(nombres):
+            print(nombres[i])
+            response = input('>')
+            try:
+                int_response = int(response)
+            except ValueError:
+                pass
+            else:
+                if 1 <= int_response:
+                    well_answered = True
+            param[i] = int_response
+            i+=1
+        return param
+
 
     def load_game(self):
         pass
