@@ -10,4 +10,5 @@ class SameGame():
 
     @property
     def not_finished(self):
+        """Declare si le jeu est fini ou pas"""
         return self.board[-1] != [' ' for i in range(self.nb_col)]
