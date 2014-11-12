@@ -2,7 +2,6 @@ __author__ = 'François Gouet; Paul Ecoffet'
 
 from game.samegame import SameGame
 
-
 class Answer:
     """
     Lie une réponse à une action ou une valeur, utilisée par la fonction ask
@@ -11,6 +10,35 @@ class Answer:
         self.value = value
         self.text = text
 
+class Board():
+    """
+    Ceci est la matrice de cases 
+    """
+    global char
+    char = []
+    col ="Z"
+    char[0] = "+---"
+    char[1] = "| "+col+" "
+    
+    
+    def __init__(self,param):
+        self.param = param
+        mat = {}
+        self.draw_Cell("Z",param[0],param[1])
+                
+    def createBoard(self,param):
+       pass 
+
+    def draw_Cell(self,y,nb_lines,nb_col):
+        i = 0
+        while i < nb_col:
+            print(char[0]*nb_lines+"+")
+            print(char[1]*nb_lines+"|")
+            print("",end="")
+            i+=1
+        print(char[0]*nb_lines+"+")
+
+        
 
 class TerminalInterface():
     """
@@ -84,19 +112,27 @@ class TerminalInterface():
         return answers[int_response - 1].value
 
     def new_game(self):
-        self.game.new_game(5, 5)
-        while(self.game.not_finished):
-            self.disp_board(self.game.board)
-            self.ask_cell(5, 5)
-
-    def disp_board(self, board):
-        for line in board:
-            for cell in line:
-                print(cell, end="")
-            print()
-
-    def ask_cell(self, nb_col, nb_line):
-        a = input(">")
+        """
+        Demande à l'utilisateur le nombre de cases et le nombre de couleurs
+        Tant que sa réponse n'est pas un entier recommencer
+        """
+        nombres = ['nombre ligne','nombre de colonnes','nombre de couleur']
+        param = [0,0,0]
+        well_answered = False
+        i = 0
+        while not well_answered or i != len(nombres):
+            print(nombres[i])
+            response = input('>')
+            try:
+                int_response = int(response)
+            except ValueError:
+                pass
+            else:
+                if 1 <= int_response:
+                    well_answered = True
+            param[i] = int_response
+            i+=1
+        B = Board(param)
 
     def load_game(self):
         pass
