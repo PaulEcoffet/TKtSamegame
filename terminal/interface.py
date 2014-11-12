@@ -97,6 +97,7 @@ class TerminalInterface():
 
     def ask_cell(self, nb_col, nb_line):
         a = input(">")
+        print(a)
 
     def load_game(self):
         pass
