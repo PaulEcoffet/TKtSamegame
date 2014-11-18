@@ -1,5 +1,8 @@
 import random
 
+from game.errors import NotEnoughCellsError
+
+
 class SameGame():
 
     def __init__(self):
@@ -14,8 +17,8 @@ class SameGame():
                       for j in range(self.nb_line)]
 
     @property
-    def not_finished(self):
-        """Declare si le jeu est fini ou pas"""
+    def won(self):
+        """Declare si le jeu est gagné ou non"""
         return self.board[-1] != [' ' for i in range(self.nb_col)]
 
     def get_same_nearby(self, line, col, visited=None):
@@ -36,3 +39,39 @@ class SameGame():
                                                 visited)
                 seen += new_seen
         return seen
+
+    def click_on_cell(self, line, col):
+        nearby = self.get_same_nearby(line, col)
+        nb_same = len(nearby)
+        if nb_same < 3:
+            raise NotEnoughCellsError()
+        self.remove_cells(nearby)
+        self.adjust_board()
+        self.score += (nb_same-2)^2
+
+    def remove_cells(self, cells):
+        for cell in cells:
+            self.board[cell[0]][cell[1]] = ' '
+
+    def adjust_board(self):
+        for j in range(self.nb_col):
+            top = -1
+            for i in range(self.nb_line):
+                if self.board[i][j] != ' ' and top == -1:
+                    top = i
+                elif self.board[i][j] == ' ' and top != -1:
+                    for k in reversed(range(top, i)):
+                        self.board[k][j], self.board[k+1][j] = self.board[k+1][j], self.board[k][j]
+                    top += 1
+
+        right = -1
+        for j in reversed(range(self.nb_col)):
+            if self.board[self.nb_line-1][j] != ' ' and right == -1:
+                right = j
+            elif self.board[self.nb_line-1][j] == ' ' and top != -1:
+                for k in range(j, right):
+                    self.swap_col(k, k+1)
+
+    def swap_col(self, col1, col2):
+        for i in range(self.nb_line):
+            self.board[i][col1], self.board[i][col2] = self.board[i][col2], self.board[i][col1]
