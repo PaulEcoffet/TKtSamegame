@@ -1,6 +1,7 @@
 import random
+import pickle
 
-from game.errors import NotEnoughCellsError, InvalidCellError
+from game.errors import NotEnoughCellsError
 
 
 class SameGame():
@@ -19,7 +20,7 @@ class SameGame():
     @property
     def won(self):
         """Declare si le jeu est gagné ou non"""
-        return self.board[-1][0] == ' '
+        return self.board[-1][0] != ' '
 
     @property
     def not_finished(self):
@@ -27,20 +28,9 @@ class SameGame():
 
     @property
     def can_play(self):
-        can_play = False
-        visited = [[False for i in range(self.nb_col)]
-                    for j in range(self.nb_line)]
-        for i in range(self.nb_line):
-            if can_play:
-                break
-            for j in range(self.nb_col):
-                if not visited[i][j] and self.board[i][j] != ' ':
-                    if len(self.get_same_nearby(i,j, visited)) >= 3:
-                        can_play = True
-                        break
-        return can_play
+        return True
 
-    def get_same_nearby(self, line, col, visited=None):
+    def get_same_nearby(self, line, col, visited=None, return_visited=False):
         """Retourne la liste des cases de même couleur autour de la case x,y"""
         glyphe = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         if not visited:
@@ -57,6 +47,7 @@ class SameGame():
                 new_seen = self.get_same_nearby(line2, col2,
                                                 visited)
                 seen += new_seen
+
         return seen
 
     def click_on_cell(self, line, col):
@@ -98,3 +89,11 @@ class SameGame():
     def swap_col(self, col1, col2):
         for i in range(self.nb_line):
             self.board[i][col1], self.board[i][col2] = self.board[i][col2], self.board[i][col1]
+
+    def load(self,f_path):
+        self.board = pickle.load(f_path)
+        self.score= pickle.load(f_path)
+
+    def save(self, f_path):
+        pickle.dump(self.board, f_path)
+        pickle.dump(self.score, f_path)        
