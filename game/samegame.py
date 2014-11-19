@@ -60,14 +60,14 @@ class SameGame():
         return seen
 
     def click_on_cell(self, line, col):
+        if not 0 <= line < self.nb_line or not 0 <= col < self.nb_col:
+            raise InvalidCellError('Invalid coords')
+        if self.board[line][col] == ' ':
+            raise InvalidCellError('Can not click on empty cell')
         nearby = self.get_same_nearby(line, col)
         nb_same = len(nearby)
         if nb_same < 3:
             raise NotEnoughCellsError()
-        if self.board[line][col] == ' ':
-            raise InvalidCellError('Can not click on empty cell')
-        if not 0 <= line < self.nb_line or not 0 <= col < self.nb_col:
-            raise InvalidCellError('Invalid coords')
         self.remove_cells(nearby)
         self.adjust_board()
         self.score += (nb_same-2)**2

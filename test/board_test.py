@@ -1,5 +1,5 @@
 import unittest
-from game.errors import NotEnoughCellsError
+from game.errors import NotEnoughCellsError, InvalidCellError
 import copy
 
 from game.samegame import SameGame
@@ -141,3 +141,10 @@ class BoardTest(unittest.TestCase):
         self.assertTrue(game.not_finished)
         game.click_on_cell(2, 1)
         self.assertFalse(game.not_finished)
+
+    def test_invalid_cell_error(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(removed_cell_board)
+        self.assertRaises(InvalidCellError, game.click_on_cell, 0, 1)
+        self.assertRaises(InvalidCellError, game.click_on_cell, -1, 0)
