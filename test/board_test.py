@@ -121,3 +121,23 @@ class BoardTest(unittest.TestCase):
         self.assertFalse(game.won)
         game.click_on_cell(2, 0)
         self.assertTrue(game.won)
+
+    def test_not_finished_by_winning(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(mock_board)
+        self.assertTrue(game.not_finished)
+        game.click_on_cell(1, 1)
+        self.assertTrue(game.not_finished)
+        game.click_on_cell(2, 1)
+        self.assertTrue(game.not_finished)
+        game.click_on_cell(2, 0)
+        self.assertFalse(game.not_finished)
+
+    def test_not_finished_no_moves(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(mock_board)
+        self.assertTrue(game.not_finished)
+        game.click_on_cell(2, 1)
+        self.assertFalse(game.not_finished)
