@@ -21,7 +21,15 @@ class SameGame():
         """Declare si le jeu est gagné ou non"""
         return self.board[-1][0] != ' '
 
-    def get_same_nearby(self, line, col, visited=None):
+    @property
+    def not_finished(self):
+        return not self.won and self.can_play
+
+    @property
+    def can_play(self):
+        return True
+
+    def get_same_nearby(self, line, col, visited=None, return_visited=False):
         """Retourne la liste des cases de même couleur autour de la case x,y"""
         glyphe = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         if not visited:
@@ -38,6 +46,7 @@ class SameGame():
                 new_seen = self.get_same_nearby(line2, col2,
                                                 visited)
                 seen += new_seen
+
         return seen
 
     def click_on_cell(self, line, col):
