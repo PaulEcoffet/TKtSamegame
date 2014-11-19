@@ -1,4 +1,5 @@
 import unittest
+from game.errors import NotEnoughCellsError
 import copy
 
 from game.samegame import SameGame
@@ -65,7 +66,7 @@ class BoardTest(unittest.TestCase):
     def test_remove_cells(self):
         game = SameGame()
         game.new_game(3, 3, 3)
-        game.board = (mock_board)
+        game.board = copy.deepcopy(mock_board)
         game.remove_cells([(1,1), (0, 1)])
         self.assertEqual(game.board, removed_cell_board)
 
@@ -91,3 +92,32 @@ class BoardTest(unittest.TestCase):
         game.click_on_cell(2, 1)
         self.assertEqual(game.board, mock_click_bottom)
         self.assertEqual(game.score, score+1)
+
+    def test_click_on_cell_error(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(mock_board)
+        score = game.score
+        self.assertRaises(NotEnoughCellsError, game.click_on_cell, 1, 0)
+        self.assertEqual(game.board, mock_board)
+        self.assertEqual(game.score, score)
+
+    def test_can_play(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(mock_board)
+        self.assertTrue(game.can_play)
+        game.click_on_cell(2, 1)
+        self.assertFalse(game.can_play)
+
+    def test_won(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(mock_board)
+        self.assertFalse(game.won)
+        game.click_on_cell(1, 1)
+        self.assertFalse(game.won)
+        game.click_on_cell(2, 1)
+        self.assertFalse(game.won)
+        game.click_on_cell(2, 0)
+        self.assertTrue(game.won)

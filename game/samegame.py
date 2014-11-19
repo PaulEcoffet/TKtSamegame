@@ -19,7 +19,7 @@ class SameGame():
     @property
     def won(self):
         """Declare si le jeu est gagné ou non"""
-        return self.board[-1][0] != ' '
+        return self.board[-1][0] == ' '
 
     @property
     def not_finished(self):
@@ -27,9 +27,20 @@ class SameGame():
 
     @property
     def can_play(self):
-        return True
+        can_play = False
+        visited = [[False for i in range(self.nb_col)]
+                    for j in range(self.nb_line)]
+        for i in range(self.nb_line):
+            if can_play:
+                break
+            for j in range(self.nb_col):
+                if not visited[i][j] and self.board[i][j] != ' ':
+                    if len(self.get_same_nearby(i,j, visited)) >= 3:
+                        can_play = True
+                        break
+        return can_play
 
-    def get_same_nearby(self, line, col, visited=None, return_visited=False):
+    def get_same_nearby(self, line, col, visited=None):
         """Retourne la liste des cases de même couleur autour de la case x,y"""
         glyphe = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         if not visited:
@@ -46,7 +57,6 @@ class SameGame():
                 new_seen = self.get_same_nearby(line2, col2,
                                                 visited)
                 seen += new_seen
-
         return seen
 
     def click_on_cell(self, line, col):
@@ -54,6 +64,10 @@ class SameGame():
         nb_same = len(nearby)
         if nb_same < 3:
             raise NotEnoughCellsError()
+        if self.board[line][col] == ' ':
+            raise InvalidCellException('Can not click on empty cell')
+        if not 0 <= line < self.nb_line or not 0 <= col < self.nb_col:
+            raise InvalidCellException('Invalid coords')
         self.remove_cells(nearby)
         self.adjust_board()
         self.score += (nb_same-2)**2
