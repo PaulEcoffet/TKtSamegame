@@ -1,6 +1,6 @@
 import random
 
-from game.errors import NotEnoughCellsError
+from game.errors import NotEnoughCellsError, InvalidCellError
 
 
 class SameGame():
@@ -65,9 +65,9 @@ class SameGame():
         if nb_same < 3:
             raise NotEnoughCellsError()
         if self.board[line][col] == ' ':
-            raise InvalidCellException('Can not click on empty cell')
+            raise InvalidCellError('Can not click on empty cell')
         if not 0 <= line < self.nb_line or not 0 <= col < self.nb_col:
-            raise InvalidCellException('Invalid coords')
+            raise InvalidCellError('Invalid coords')
         self.remove_cells(nearby)
         self.adjust_board()
         self.score += (nb_same-2)**2
