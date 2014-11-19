@@ -1,0 +1,2 @@
+class InterfaceInputError(Exception):
+    pass

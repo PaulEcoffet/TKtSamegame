@@ -1,7 +1,11 @@
 __author__ = 'François Gouet; Paul Ecoffet'
 
 from game.samegame import SameGame
+from terminal.errors import InterfaceInputError
+from game.errors import NotEnoughCellsError,InvalidCellError
 import string
+import glob
+
 
 class Answer:
     """
@@ -85,12 +89,45 @@ class TerminalInterface():
     def new_game(self):
         nb_line, nb_col, nb_colors = self.ask_set_up_game()
         self.game.new_game(nb_col, nb_line, nb_colors)
-        #while(self.game.not_finished):
-        self.disp_board()
+        self.run_game()
 
+    def run_game(self):
+        while(self.game.not_finished):
+            self.disp_board()
+            try:   
+                line,col = self.cell_choice()
+            except InterfaceInputError:
+                print ("Case entrée invalide")
+            else:
+                try:
+                    self.game.click_on_cell(line,col)
+                except NotEnoughCellsError:
+                    print ("pas assez de cases")
+                except InvalidCellError:
+                    print ("Vous ne pouvez supprimé une case vide")
+        self.disp_board()
+        if self.game.won:
+            print ("gg")
+        else:
+            print("tu es une merde")
+            
+
+    def cell_choice(self):
+        choice = input("<> Enter Cell ")
+        col = ord(choice[0]) - ord('A')
+        try:
+            line = int(choice[1:])-1
+        except ValueError:
+            raise InterfaceInputError()
+        if 0 <= col < self.game.nb_col and 0 <= line < self.game.nb_line:
+                return line,col
+        else:
+            raise InterfaceInputError()
+            
     def disp_board(self):
+        print("  ",end="")
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
-            print ("   "+valeur+" ",end="")
+            print ("  "+valeur+" ",end="")
         print()
         for i,line in enumerate(self.game.board):
             print(" "+" " + "+" + "---+" * self.game.nb_col,end="")
@@ -100,8 +137,9 @@ class TerminalInterface():
                 print(cell+" | ", end="")
             print()
         print("  +" + "---+" * self.game.nb_col)
+        print("  ",end="")
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
-            print ("   "+valeur+" ",end="")
+            print ("  "+valeur+" ",end="")
         print()
 
     def ask_set_up_game(self):
@@ -129,7 +167,11 @@ class TerminalInterface():
 
 
     def load_game(self):
-        pass
+        actions = [Answer(name, name) for name in glob.glob("saves/*.samegame")]
+        f_path = self.ask("Quelle partie voulez-vous charger ?", actions)
+        self.game.load(f_path)
+        self.run_game()
 
     def display_help(self):
-        pass
+        with open("help.txt") as f:
+            print (f.read())
