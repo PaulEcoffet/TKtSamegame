@@ -9,6 +9,12 @@ mock_board = [
     ['B', 'A', 'A']
 ]
 
+mock_click_bottom = [
+    ['O', ' ', ' '],
+    ['B', 'O', ' '],
+    ['B', 'O', 'B']
+]
+
 removed_cell_board = [
     ['O', ' ', 'B'],
     ['B', ' ', 'A'],
@@ -52,27 +58,36 @@ class BoardTest(unittest.TestCase):
     def test_check_nearby(self):
         game = SameGame()
         game.new_game(3, 3, 3)
-        game.board = copy.copy(mock_board)
+        game.board = copy.deepcopy(mock_board)
         same = game.get_same_nearby(1, 1)
         self.assertCountEqual(same, [(0,0), (0, 1), (1, 1)])
 
     def test_remove_cells(self):
         game = SameGame()
         game.new_game(3, 3, 3)
-        game.board = copy.copy(mock_board)
+        game.board = (mock_board)
         game.remove_cells([(1,1), (0, 1)])
         self.assertEqual(game.board, removed_cell_board)
 
     def test_adjust_vertically(self):
         game = SameGame()
         game.new_game(3, 3, 3)
-        game.board = copy.copy(adjust_vertically)
+        game.board = copy.deepcopy(adjust_vertically)
         game.adjust_board()
         self.assertEqual(game.board, solution_adjust_vertically)
 
     def test_adjust_horizontally(self):
         game = SameGame()
         game.new_game(3, 3, 3)
-        game.board = copy.copy(adjust_horizontally)
+        game.board = copy.deepcopy(adjust_horizontally)
         game.adjust_board()
         self.assertEqual(game.board, solution_adjust_horizontally)
+
+    def test_click_on_cell(self):
+        game = SameGame()
+        game.new_game(3, 3, 3)
+        game.board = copy.deepcopy(mock_board)
+        score = game.score
+        game.click_on_cell(2, 1)
+        self.assertEqual(game.board, mock_click_bottom)
+        self.assertEqual(game.score, score+1)

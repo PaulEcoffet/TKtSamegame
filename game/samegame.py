@@ -19,7 +19,7 @@ class SameGame():
     @property
     def won(self):
         """Declare si le jeu est gagné ou non"""
-        return self.board[-1] != [' ' for i in range(self.nb_col)]
+        return self.board[-1][0] != ' '
 
     def get_same_nearby(self, line, col, visited=None):
         """Retourne la liste des cases de même couleur autour de la case x,y"""
@@ -47,7 +47,7 @@ class SameGame():
             raise NotEnoughCellsError()
         self.remove_cells(nearby)
         self.adjust_board()
-        self.score += (nb_same-2)^2
+        self.score += (nb_same-2)**2
 
     def remove_cells(self, cells):
         for cell in cells:
