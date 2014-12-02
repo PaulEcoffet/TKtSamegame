@@ -12,7 +12,7 @@ class PygameInterface(object):
             self.game = None
             self.do_run = True
             self.run()
-            self.clickable = None
+            self.screen = MenuScreen()
         finally:
             pygame.quit()
 
@@ -20,7 +20,8 @@ class PygameInterface(object):
         self.chargerMenu()
         while self.do_run:
             self.do_events()
-            self.display_all()
+            self.screen.update()
+            self.window.flip(self.screen.draw())
 
     def do_events(self):
         for event in pygame.event.get():
@@ -42,12 +43,12 @@ class PygameInterface(object):
         quit_button_game = pygame.sprite.Sprite()
         quit_button_game.image = pygame.image.load("quit.png").convert()
         quit_button_game.rect = quit_button_game.image.get_rect(center=(100, 300))
-        
+
         buttons = pygame.sprite.Group(new_game_button,quit_button_game)
         buttons.draw(self.window)
         self.clickable = [(new_game_button,self.new_game),
                      (quit_button_game,self.quitter)]
-        
+
 
     def quitter(self):
         self.do_run =False
@@ -55,7 +56,3 @@ class PygameInterface(object):
     def new_game(self):
         self.game = SameGame()
         self.game.new_game(10,10,4)
-        
-        
-
-    
