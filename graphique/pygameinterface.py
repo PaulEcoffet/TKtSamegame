@@ -12,7 +12,7 @@ class PygameInterface(object):
             self.game = None
             self.do_run = True
             self.run()
-            self.screen = MenuScreen()
+            self.screen = MenuScreen(self)
         finally:
             pygame.quit()
 
