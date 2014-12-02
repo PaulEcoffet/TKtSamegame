@@ -4,6 +4,7 @@ from game.samegame import SameGame
 from terminal.errors import InterfaceInputError
 from game.errors import NotEnoughCellsError,InvalidCellError
 import string
+import pickle
 import glob
 
 
@@ -20,8 +21,8 @@ class TerminalInterface():
     Classe principale de l'interface console.
     """
 
-    def __init__(self, game):
-        self.game = game
+    def __init__(self):
+        self.game = None
 
     def run(self):
         """
@@ -87,17 +88,26 @@ class TerminalInterface():
         return answers[int_response - 1].value
 
     def new_game(self):
+        self.game = SameGame()
         nb_line, nb_col, nb_colors = self.ask_set_up_game()
         self.game.new_game(nb_col, nb_line, nb_colors)
         self.run_game()
 
     def run_game(self):
-        while(self.game.not_finished):
+        quit = False
+        while self.game.not_finished and not quit:
             self.disp_board()
-            try:   
-                line,col = self.cell_choice()
+            entry = input('Enter cell > ').upper()
+            try:
+                line,col = self.cell_choice(entry)
             except InterfaceInputError:
-                print ("Case entrée invalide")
+                if entry == 'QUIT' or entry == 'EXIT':
+                    quit = True
+                elif entry == 'SAVE':
+                    path = input('nom du fichier >')
+                    self.save_game(path)
+                else:
+                    print ("Case entrée invalide")
             else:
                 try:
                     self.game.click_on_cell(line,col)
@@ -108,12 +118,11 @@ class TerminalInterface():
         self.disp_board()
         if self.game.won:
             print ("gg")
-        else:
+        elif not quit:
             print("tu es une merde")
-            
 
-    def cell_choice(self):
-        choice = input("<> Enter Cell ")
+
+    def cell_choice(self, choice):
         col = ord(choice[0]) - ord('A')
         try:
             line = int(choice[1:])-1
@@ -123,21 +132,21 @@ class TerminalInterface():
                 return line,col
         else:
             raise InterfaceInputError()
-            
+
     def disp_board(self):
-        print("  ",end="")
+        print("   ",end="")
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
             print ("  "+valeur+" ",end="")
         print()
         for i,line in enumerate(self.game.board):
-            print(" "+" " + "+" + "---+" * self.game.nb_col,end="")
+            print("   +" + "---+" * self.game.nb_col,end="")
             print()
-            print(str(i+1) + " | ",end="")
+            print("{:2d} | ".format(i+1),end="")
             for cell in line:
                 print(cell+" | ", end="")
             print()
-        print("  +" + "---+" * self.game.nb_col)
-        print("  ",end="")
+        print("   +" + "---+" * self.game.nb_col)
+        print("   ",end="")
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
             print ("  "+valeur+" ",end="")
         print()
@@ -168,9 +177,19 @@ class TerminalInterface():
 
     def load_game(self):
         actions = [Answer(name, name) for name in glob.glob("saves/*.samegame")]
-        f_path = self.ask("Quelle partie voulez-vous charger ?", actions)
-        self.game.load(f_path)
-        self.run_game()
+        if actions:
+            actions.append(Answer(None, '*Ne pas charger de partie*'))
+            f_path = self.ask("Quelle partie voulez-vous charger ?", actions)
+            if f_path:
+                with open(f_path, 'rb') as f:
+                    self.game = pickle.load(f)
+                self.run_game()
+        else:
+            print("Il n'y a pas de parties à charger")
+
+    def save_game(self, path):
+        with open('saves/' + path + '.samegame', "wb") as f:
+            pickle.dump(self.game, f)
 
     def display_help(self):
         with open("help.txt") as f:
