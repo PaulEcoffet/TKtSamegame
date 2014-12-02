@@ -10,4 +10,4 @@ def main_graphique():
     PygameInterface()
 
 if __name__ == '__main__':
-    main_terminal()
+    main_graphique()
