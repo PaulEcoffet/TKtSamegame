@@ -9,6 +9,7 @@ class PygameInterface(object):
         pygame.init()
         self.window = pygame.display.set_mode((800, 600))
         self.game = SameGame()
+        self.fps_clock = pygame.time.Clock()
         self.do_run = True
         self.run()
 
@@ -16,6 +17,8 @@ class PygameInterface(object):
         while self.do_run:
             self.do_events()
             self.display_all()
+            self.fps_clock.tick(60)
+
 
     def do_events(self):
         for event in pygame.event.get():
