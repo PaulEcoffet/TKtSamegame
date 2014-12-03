@@ -97,6 +97,7 @@ class TerminalInterface():
         quit = False
         while self.game.not_finished and not quit:
             self.disp_board()
+            print ("score: {}".format(self.game.score))
             entry = input('Enter cell > ').upper()
             try:
                 line,col = self.cell_choice(entry)
@@ -116,6 +117,7 @@ class TerminalInterface():
                 except InvalidCellError:
                     print ("Vous ne pouvez supprimé une case vide")
         self.disp_board()
+        print ("score: {}".format(self.game.score))
         if self.game.won:
             print ("gg")
         elif not quit:
@@ -144,7 +146,7 @@ class TerminalInterface():
             print("{:2d} | ".format(i+1),end="")
             for cell in line:
                 print(cell+" | ", end="")
-            print()
+            print(i+1)
         print("   +" + "---+" * self.game.nb_col)
         print("   ",end="")
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
@@ -170,8 +172,8 @@ class TerminalInterface():
             else:
                 if 1 <= int_response:
                     well_answered = True
-            param[i] = int_response
-            i+=1
+                    param[i] = int_response
+                    i+=1
         return param
 
 
