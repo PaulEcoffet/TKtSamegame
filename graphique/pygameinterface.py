@@ -10,6 +10,6 @@ class PygameInterface(object):
         self.root.mainloop()
 
     def switch_frame(self, frame_cls, *args, **kwargs):
-        self.frame.destroy
+        self.frame.destroy()
         self.frame = frame_cls(self, *args, **kwargs)
         self.frame.pack(side=LEFT, fill=BOTH)
