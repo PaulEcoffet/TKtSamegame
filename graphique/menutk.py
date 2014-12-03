@@ -1,5 +1,6 @@
 from tkinter import *
 from game.samegame import SameGame
+from graphique.boardtk import boardFrame
 
 class MenuFrame(Frame):
 
@@ -15,6 +16,7 @@ class MenuFrame(Frame):
         game = SameGame()
         game.new_game(10,10,4)
         self.switch_frame(BoardFrame,game)
+        
         
         
         
