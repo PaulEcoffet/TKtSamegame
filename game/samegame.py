@@ -1,7 +1,7 @@
 import random
 import pickle
 
-from game.errors import NotEnoughCellsError
+from game.errors import NotEnoughCellsError, InvalidCellError
 
 
 class SameGame():
