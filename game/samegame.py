@@ -39,9 +39,9 @@ class SameGame():
                     if len(self.get_same_nearby(i,j, visited)) >= 3:
                         can_play = True
                         break
-        return can_play 
+        return can_play
 
-    def get_same_nearby(self, line, col, visited=None, return_visited=False):
+    def get_same_nearby(self, line, col, visited=None):
         """Retourne la liste des cases de même couleur autour de la case x,y"""
         glyphe = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         if not visited:
@@ -58,7 +58,6 @@ class SameGame():
                 new_seen = self.get_same_nearby(line2, col2,
                                                 visited)
                 seen += new_seen
-
         return seen
 
     def click_on_cell(self, line, col):
@@ -80,22 +79,19 @@ class SameGame():
 
     def adjust_board(self):
         for j in range(self.nb_col):
-            top = -1
-            for i in range(self.nb_line):
-                if self.board[i][j] != ' ' and top == -1:
-                    top = i
-                elif self.board[i][j] == ' ' and top != -1:
-                    for k in reversed(range(top, i)):
-                        self.board[k][j], self.board[k+1][j] = self.board[k+1][j], self.board[k][j]
-                    top += 1
+            top = self.nb_line
+            for i in reversed(range(self.nb_line)):
+                if self.board[i][j] != ' ':
+                    top -= 1
+                    if top != i:
+                        self.board[i][j], self.board[top][j] = self.board[top][j], self.board[i][j]
 
         right = -1
-        for j in reversed(range(self.nb_col)):
-            if self.board[self.nb_line-1][j] != ' ' and right == -1:
-                right = j
-            elif self.board[self.nb_line-1][j] == ' ' and top != -1:
-                for k in range(j, right):
-                    self.swap_col(k, k+1)
+        for j in range(self.nb_col):
+            if self.board[-1][j] != ' ':
+                right += 1
+                if right != j:
+                    self.swap_col(right, j)
 
     def swap_col(self, col1, col2):
         for i in range(self.nb_line):
