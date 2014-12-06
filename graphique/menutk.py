@@ -18,7 +18,7 @@ class MenuFrame(Frame):
 
     def new_game(self):
         game = SameGame()
-        game.new_game(10,10,4)
+        game.new_game(4,4,4)
         self.interface.switch_frame(BoardFrame,game)
 
     def load_game(self):

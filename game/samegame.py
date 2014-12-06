@@ -7,10 +7,13 @@ from game.errors import NotEnoughCellsError, InvalidCellError
 class SameGame():
 
     def __init__(self):
-        self.possible_colors = ['B', 'O', 'A', 'M', 'V', 'R']
+        self.possible_colors = ["B","O","A",
+                                "M","V",
+                                "R"]
 
     def new_game(self, nb_line, nb_col, nb_colors):
         self.score = 0
+        self.nb_colors = nb_colors
         self.used_colors = self.possible_colors[:nb_colors]
         self.nb_line = nb_line
         self.nb_col = nb_col
