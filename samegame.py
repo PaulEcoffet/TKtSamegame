@@ -9,7 +9,7 @@ def main_terminal():
     interface = TerminalInterface()
     interface.run()
 
-def main_graphique():
+def main_graphique():   
     PygameInterface()
 
 if __name__ == '__main__':
