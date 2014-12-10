@@ -55,3 +55,4 @@ target/
 
 # Rope
 .ropeproject
+*.db
