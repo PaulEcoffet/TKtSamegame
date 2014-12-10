@@ -5,16 +5,15 @@ from game.errors import NotEnoughCellsError, InvalidCellError
 
 
 class SameGame():
-
-    def __init__(self):
-        self.possible_colors = ["B","O","A",
-                                "M","V",
-                                "R"]
+    
+    possible_colors = ["B","O","A",
+                        "M","V",
+                        "R"] 
 
     def new_game(self, nb_line, nb_col, nb_colors):
         self.score = 0
         self.nb_colors = nb_colors
-        self.used_colors = self.possible_colors[:nb_colors]
+        self.used_colors = SameGame.possible_colors[:nb_colors]
         self.nb_line = nb_line
         self.nb_col = nb_col
         self.board = [[random.choice(self.used_colors) for i in range(nb_col)]
