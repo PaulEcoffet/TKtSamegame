@@ -13,8 +13,7 @@ class BoardFrame(Frame):
                          "M":PhotoImage(file="graphique/img/ZM.gif"),
                          "V":PhotoImage(file="graphique/img/ZY.gif"),
                          "R":PhotoImage(file="graphique/img/ZR.gif"),
-                         " ": PhotoImage(width=48, height=48)}
-        self.grid = {}
+                         " ": PhotoImage(file="graphique/img/blank_big.gif")}
         self.interface = interface
         self.game = game
         self.buttons = []
@@ -40,12 +39,12 @@ class BoardFrame(Frame):
         else:
             self.message['text'] = ''
         self.dispBoard()
+
         if self.game.won:
-            self.score['text'] = "FELICITATION SCORE:" + str(self.game.score)
+            self.message['text'] = "FELICITATION"
         elif not self.game.can_play:
-            self.score['text'] = "PARTIE FINIE SCORE:" + str(self.game.score)
-        else:
-            self.score['text'] = 'SCORE: ' + str(self.game.score)
+            self.message['text'] = "PARTIE FINIE"
+        self.score['text'] = 'SCORE: ' + str(self.game.score)
 
 
     def dispBoard(self):
@@ -63,6 +62,6 @@ class BoardFrame(Frame):
         for line in range(self.game.nb_line):
             self.buttons.append([])
             for col in range(self.game.nb_col):
-                c = Button(self.board,command=lambda cell=(col,line): self.cb_cell(cell))
+                c = Button(self.board, borderwidth=0, padx=0, pady=0, command=lambda cell=(col,line): self.cb_cell(cell))
                 self.buttons[line].append(c)
                 c.grid(column=col, row=line)

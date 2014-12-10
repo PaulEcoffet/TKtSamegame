@@ -56,3 +56,4 @@ target/
 # Rope
 .ropeproject
 *.db
+graphique/img/Thumbs.db

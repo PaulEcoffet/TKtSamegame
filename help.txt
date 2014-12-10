@@ -1,2 +1,8 @@
 SameGame
+========
 par François Gouet et Paul Ecoffet
+
+But du jeu
+----------
+
+Le but du SameGame est d'éliminer le plus de cases adjacentes de même couleur afin d'obtenir le meilleur score possible.
