@@ -31,7 +31,7 @@ class BoardFrame(Frame):
 
     def cb_cell(self,cell):
         try:
-            self.game.click_on_cell(cell[1],cell[0])
+            self.game.click_on_cell(cell[0],cell[1])
         except InvalidCellError as e:
             self.message['text'] = str(e)
         except  NotEnoughCellsError as e:
@@ -62,6 +62,6 @@ class BoardFrame(Frame):
         for line in range(self.game.nb_line):
             self.buttons.append([])
             for col in range(self.game.nb_col):
-                c = Button(self.board, borderwidth=0, padx=0, pady=0, command=lambda cell=(col,line): self.cb_cell(cell))
+                c = Button(self.board, borderwidth=0, padx=0, pady=0, command=lambda cell=(line,col): self.cb_cell(cell))
                 self.buttons[line].append(c)
                 c.grid(column=col, row=line)
