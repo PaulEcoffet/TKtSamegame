@@ -17,25 +17,25 @@ class MenuFrame(Frame):
         lab_img.image = img
         lab_img.grid(row=0,column=0,columnspan=3)
 
-        nb_line_label=Label(self,text="nombre de lignes")
+        nb_line_label=Label(self,text="Nombre de lignes")
         nb_line_label.grid(row=1,column=0,sticky='NSWE')
         slider_color = Scale(self, orient= HORIZONTAL,from_=6, to=12,
                              command=self.set_nb_line)
         slider_color.grid(row=1,column=1,sticky=W+N+S+E)
 
-        nb_col_label=Label(self,text="nombre de colonnes")
+        nb_col_label=Label(self,text="Nombre de colonnes")
         nb_col_label.grid(row=2,column=0,sticky=W+N+S+E)
         slider_nb_col = Scale(self, orient= HORIZONTAL,from_=6, to=12,
                              command=self.set_nb_col)
         slider_nb_col.grid(row=2,column=1,sticky=W+N+S+E)
 
-        nb_color_label=Label(self,text="nombre de couleurs")
+        nb_color_label=Label(self,text="Nombre de couleurs")
         nb_color_label.grid(row=3,column=0,sticky=W+N+S+E)
         slider_nb_line = Scale(self, orient= HORIZONTAL,from_=2, to=len(SameGame.possible_colors),
                              command=self.set_nb_color)
         slider_nb_line.grid(row=3,column=1,sticky=W+N+S+E)
 
-        new_game_button = Button(self,text="NEW GAME",command=self.new_game)
+        new_game_button = Button(self,text="NOUVELLE PARTIE",command=self.new_game)
         new_game_button.grid(row=4,column=0,columnspan=2,sticky=W+N+S+E)
         load_button = Button(self,text="CHARGER UNE PARTIE",command=self.load_game)
         load_button.grid(row=3,column=2,sticky=W+N+S+E)
@@ -48,9 +48,14 @@ class MenuFrame(Frame):
         self.interface.switch_frame(BoardFrame,game)
 
     def load_game(self):
-        f = tkinter.filedialog.askopenfile(mode='rb',initialdir = '../saves/' )
-        game = pickle.load(f)
-        self.interface.switch_frame(BoardFrame, game)
+        try:
+            f = tkinter.filedialog.askopenfile(mode='rb', initialdir = 'saves/')
+            game = pickle.load(f)
+        except Exception as e:
+            print(e) # Show error
+        else:
+            if isinstance(game, SameGame):
+                self.interface.switch_frame(BoardFrame, game)
 
     def set_nb_col(self,n):
         self.nb_col = int(n)
