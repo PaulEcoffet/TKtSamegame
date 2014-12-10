@@ -48,10 +48,9 @@ class BoardFrame(Frame):
 
 
     def dispBoard(self):
-        for loop in range(self.game.nb_col*self.game.nb_line):
-            col = loop % self.game.nb_col
-            line = loop // self.game.nb_line
-            self.buttons[line][col]['image'] = self.possible[self.game.board[line][col]]
+        for line in range(self.game.nb_line):
+            for col in range(self.game.nb_col):
+                self.buttons[line][col]['image'] = self.possible[self.game.board[line][col]]
 
     def gen_buttons(self):
         if self.buttons:  # S'il y a des boutons, on nettoie
