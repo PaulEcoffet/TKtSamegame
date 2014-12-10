@@ -18,16 +18,23 @@ class BoardFrame(Frame):
         self.game = game
         self.buttons = []
         self.board = Frame(self, relief=SOLID, bg='black', border=2)
-        self.board.pack(side=TOP, padx=5, pady=5)
         self.gen_buttons()
         self.dispBoard()
+        self.board.pack(side=TOP, padx=5, pady=5)
         self.score = Label(self, text="SCORE :" + str(self.game.score))
         self.score.pack(side=TOP)
         self.message = Label(self, text='', fg='red')
         self.message.pack(side=TOP)
 
+        self.bottom_frame = Frame(self)
+        self.bottom_frame.pack(side=TOP, fill=BOTH)
+
+        self.back_to_menu_button = Button(self.bottom_frame, text='Retour menu', command=self.back_to_menu)
+        self.back_to_menu_button.pack(side=RIGHT)
 
 
+    def back_to_menu(self):
+        self.interface.switch_to_menu()
 
     def cb_cell(self,cell):
         try:

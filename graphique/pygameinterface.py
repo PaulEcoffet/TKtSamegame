@@ -13,3 +13,6 @@ class PygameInterface(object):
         self.frame.destroy()
         self.frame = frame_cls(self, *args, **kwargs)
         self.frame.pack(side=LEFT, fill=BOTH)
+
+    def switch_to_menu(self):
+    	self.switch_frame(MenuFrame)
