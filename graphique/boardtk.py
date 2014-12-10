@@ -17,7 +17,7 @@ class BoardFrame(Frame):
         self.interface = interface
         self.game = game
         self.buttons = []
-        self.board = Frame(self, relief=SOLID, border=2)
+        self.board = Frame(self, relief=SOLID, bg='black', border=2)
         self.board.pack(side=TOP, padx=5, pady=5)
         self.gen_buttons()
         self.dispBoard()
@@ -40,7 +40,7 @@ class BoardFrame(Frame):
             self.message['text'] = ''
         self.dispBoard()
 
-        if self.game.won:
+        if self.game.won:   
             self.message['text'] = "FELICITATION"
         elif not self.game.can_play:
             self.message['text'] = "PARTIE FINIE"
@@ -61,6 +61,6 @@ class BoardFrame(Frame):
         for line in range(self.game.nb_line):
             self.buttons.append([])
             for col in range(self.game.nb_col):
-                c = Button(self.board, borderwidth=0, padx=0, pady=0, command=lambda cell=(line,col): self.cb_cell(cell))
+                c = Button(self.board, borderwidth=0, bg='black', activebackground='black', relief=FLAT, padx=0, pady=0, command=lambda cell=(line,col): self.cb_cell(cell))
                 self.buttons[line].append(c)
                 c.grid(column=col, row=line)
