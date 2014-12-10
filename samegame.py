@@ -12,8 +12,10 @@ def main_terminal():
 def main_graphique():   
     PygameInterface()
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == '-t':
+if __name__ == '__main__':  
+    if len(sys.argv) > 1 and sys.argvv[1] == '-t':
         main_terminalminal() 
     else:
         main_graphique()
+    
+    
