@@ -3,17 +3,19 @@ from game.errors import InvalidCellError, NotEnoughCellsError
 import tkinter.filedialog
 import pickle
 
+from PIL import ImageTk
+
 
 class BoardFrame(Frame):
 
     def __init__(self, interface, game):
         super().__init__(interface.root)
-        self.possible = {"B":PhotoImage(file="graphique/img/ZB.gif"),
-                         "O":PhotoImage(file="graphique/img/ZC.gif"),
-                         "A":PhotoImage(file="graphique/img/ZG.gif"),
-                         "M":PhotoImage(file="graphique/img/ZM.gif"),
-                         "V":PhotoImage(file="graphique/img/ZY.gif"),
-                         "R":PhotoImage(file="graphique/img/ZR.gif"),
+        self.possible = {"B":ImageTk.PhotoImage(file="graphique/img/blue.png"),
+                         "O":ImageTk.PhotoImage(file="graphique/img/orange.png"),
+                         "A":ImageTk.PhotoImage(file="graphique/img/blurple.png"),
+                         "M":ImageTk.PhotoImage(file="graphique/img/yellow.png"),
+                         "V":ImageTk.PhotoImage(file="graphique/img/green.png"),
+                         "R":ImageTk.PhotoImage(file="graphique/img/red.png"),
                          " ": PhotoImage(file="graphique/img/blank_big.gif")}
         self.interface = interface
         self.game = game
