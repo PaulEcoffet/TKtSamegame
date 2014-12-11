@@ -1,6 +1,7 @@
 from tkinter import *
 from game.errors import InvalidCellError, NotEnoughCellsError
-
+import tkinter.filedialog
+import pickle
 
 
 class BoardFrame(Frame):
@@ -32,6 +33,17 @@ class BoardFrame(Frame):
         self.back_to_menu_button = Button(self.bottom_frame, text='Retour menu', command=self.back_to_menu)
         self.back_to_menu_button.pack(side=RIGHT)
 
+        self.save_game_button = Button(self.bottom_frame, text='Sauvegarder', command=self.save)
+        self.save_game_button.pack(side=LEFT)
+
+    def save(self):
+        f = tkinter.filedialog.asksaveasfile(mode='wb', initialdir='../saves', defaultextension='.samegame')
+        try:
+            pickle.dump(self.game, f)
+        except TypeError as e:
+            pass
+        else:
+            self.message['text'] = 'Partie sauvegardée #SWAG'
 
     def back_to_menu(self):
         self.interface.switch_to_menu()
