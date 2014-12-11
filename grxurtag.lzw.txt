@@ -1,0 +1,51 @@
+﻿Merge remote-tracking branch 'origin/master'
+
+Conflicts:
+	graphique/pygameinterface.py
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 7 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   .gitignore
+#	modified:   graphique/boardtk.py
+#	new file:   graphique/img/blue.png
+#	new file:   graphique/img/blue_h.png
+#	new file:   graphique/img/blurple.png
+#	new file:   graphique/img/blurple_h.png
+#	new file:   graphique/img/green.png
+#	new file:   graphique/img/green_h.png
+#	new file:   graphique/img/orange.png
+#	new file:   graphique/img/orange_h.png
+#	new file:   graphique/img/raw/bkg.svg
+#	new file:   graphique/img/raw/blue.svg
+#	new file:   graphique/img/raw/blurple.svg
+#	new file:   graphique/img/raw/green.svg
+#	new file:   graphique/img/raw/highlight.png
+#	new file:   graphique/img/raw/highlight.svg
+#	new file:   graphique/img/raw/orange.svg
+#	new file:   graphique/img/raw/red.svg
+#	new file:   graphique/img/raw/yellow.svg
+#	new file:   graphique/img/red.png
+#	new file:   graphique/img/red_h.png
+#	new file:   graphique/img/yellow.png
+#	new file:   graphique/img/yellow_h.png
+#	modified:   graphique/menutk.py
+#	renamed:    graphique/pygameinterface.py -> graphique/tkinterface.py
+#	modified:   samegame.py
+#	deleted:    saves/m.samegame
+#	deleted:    saves/ultra.samegame
+#
+
