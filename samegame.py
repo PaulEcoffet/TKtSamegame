@@ -13,7 +13,7 @@ def main_graphique():
     TkInterface()
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argvv[1] == '-t':
-        main_terminalminal()
+    if len(sys.argv) > 1 and sys.argv[1] == '-t':
+        main_terminal()
     else:
         main_graphique()
