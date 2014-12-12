@@ -80,6 +80,7 @@ class BoardFrame(Frame):
             self.message['text'] = "PARTIE FINIE"
             self.deactivate_save()
         self.score['text'] = 'SCORE: ' + str(self.game.score)
+        self.hover_cell(cell[0], cell[1])
 
     def deactivate_save(self):
         self.save_game_button['state'] = DISABLED
