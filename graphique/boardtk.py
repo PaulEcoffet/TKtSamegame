@@ -32,20 +32,25 @@ class BoardFrame(Frame):
         self.board = Frame(self, relief=SOLID, bg='black', border=2)
         self.gen_buttons()
         self.dispBoard()
-        self.board.pack(side=TOP, padx=5, pady=5)
-        self.score = Label(self, text="SCORE :" + str(self.game.score))
-        self.score.pack(side=TOP)
-        self.message = Label(self, text='', fg='red')
-        self.message.pack(side=TOP)
+
+        self.messageframe = Frame(self, borderwidth=2)
+        self.score = Label(self.messageframe, text="SCORE : " + str(self.game.score), borderwidth=2, relief=GROOVE)
+        self.score.grid(column=0, row=0, sticky='nswe')
+        self.messageframe.columnconfigure(0, weight=1, uniform='messageframe') # Same size boxes
+        self.message = Label(self.messageframe, text='', fg='red', borderwidth=2, relief=GROOVE)
+        self.message.grid(column=1, row=0, sticky='nswe')
+        self.messageframe.columnconfigure(1, weight=1, uniform='messageframe') # Same size boxes
+        self.messageframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
+        self.board.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
 
         self.bottom_frame = Frame(self)
         self.bottom_frame.pack(side=TOP, fill=BOTH)
 
         self.back_to_menu_button = Button(self.bottom_frame, text='Retour menu', command=self.back_to_menu)
-        self.back_to_menu_button.pack(side=RIGHT)
+        self.back_to_menu_button.pack(side=RIGHT, padx=5, pady=5)
 
         self.save_game_button = Button(self.bottom_frame, text='Sauvegarder', command=self.save)
-        self.save_game_button.pack(side=LEFT)
+        self.save_game_button.pack(side=LEFT, padx=5, pady=5)
 
     def save(self):
         if not self.game.can_play:
@@ -66,9 +71,9 @@ class BoardFrame(Frame):
         try:
             self.game.click_on_cell(cell[0],cell[1])
         except InvalidCellError as e:
-            self.message['text'] = str(e)
+            self.message['text'] = 'Case vide'
         except  NotEnoughCellsError as e:
-            self.message['text'] = 'Pas assez de cases de même couleur'
+            self.message['text'] = 'Pas assez de cases'
         else:
             self.message['text'] = ''
         self.dispBoard()
@@ -79,7 +84,7 @@ class BoardFrame(Frame):
         elif not self.game.can_play:
             self.message['text'] = "PARTIE FINIE"
             self.deactivate_save()
-        self.score['text'] = 'SCORE: ' + str(self.game.score)
+        self.score['text'] = 'SCORE : ' + str(self.game.score)
         self.hover_cell(cell[0], cell[1])
 
     def deactivate_save(self):
