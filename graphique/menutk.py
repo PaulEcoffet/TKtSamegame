@@ -33,9 +33,7 @@ class MenuFrame(Frame):
         load_button.grid(row=2,column=2,sticky=W+N+S+E)
 
     def new_game(self,nb_lines,nb_col,nb_colors):
-        game = SameGame()
-        print ("{}{}{}".format(nb_lines,nb_col,nb_colors))
-        game.new_game(nb_lines,nb_col,nb_colors)
+        game = SameGame(nb_lines,nb_col,nb_colors)
         self.interface.switch_frame(BoardFrame,game)
 
     def new_perso_game(self):
