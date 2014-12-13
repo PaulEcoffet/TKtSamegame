@@ -1,8 +1,11 @@
-__author__ = 'François Gouet; Paul Ecoffet'
+"""
+Ce module contient l'interface utilisateur en console du samegame
+"""
+__author__ = 'François Gouet, Paul Ecoffet'
 
 from game.samegame import SameGame
 from terminal.errors import InterfaceInputError
-from game.errors import NotEnoughCellsError,InvalidCellError
+from game.errors import NotEnoughCellsError, InvalidCellError
 import string
 import pickle
 import glob
@@ -15,6 +18,7 @@ class Answer:
     def __init__(self, value, text):
         self.value = value
         self.text = text
+
 
 class TerminalInterface():
     """
@@ -46,7 +50,10 @@ class TerminalInterface():
         print()
 
     def goodbye(self):
-        print('See ya')
+        """
+        Affiche un message d'au revoir
+        """
+        print("Merci d'avoir joué. À la prochaine !")
 
     def display_main_menu(self):
         """
@@ -88,78 +95,85 @@ class TerminalInterface():
         return answers[int_response - 1].value
 
     def new_game(self):
-        self.game = SameGame()
+        """
+        demande à l'utilisateur sa configuration et lance une nouvelle partie.
+        """
         nb_line, nb_col, nb_colors = self.ask_set_up_game()
-        self.game.new_game(nb_col, nb_line, nb_colors)
+        self.game = SameGame(nb_col, nb_line, nb_colors)
         self.run_game()
 
     def run_game(self):
-        quit = False
-        while self.game.not_finished and not quit:
+        """
+        Fait tourner une partie jusqu'à ce qu'elle prenne fin
+        """
+        quit_game = False
+        while self.game.not_finished and not quit_game:
             self.disp_board()
-            print ("score: {}".format(self.game.score))
+            print("score: {}".format(self.game.score))
             entry = input('Enter cell > ').upper()
             try:
-                line,col = self.cell_choice(entry)
+                line, col = self.cell_choice(entry)
             except InterfaceInputError:
                 if entry == 'QUIT' or entry == 'EXIT':
-                    quit = True
+                    quit_game = True
                 elif entry == 'SAVE':
                     path = input('nom du fichier >')
                     self.save_game(path)
                 else:
-                    print ("Case entrée invalide")
+                    print("Case entrée invalide")
             else:
                 try:
-                    self.game.click_on_cell(line,col)
+                    self.game.click_on_cell(line, col)
                 except NotEnoughCellsError:
-                    print ("pas assez de cases")
+                    print("pas assez de cases")
                 except InvalidCellError:
-                    print ("Vous ne pouvez supprimé une case vide")
+                    print("Vous ne pouvez supprimé une case vide")
         self.disp_board()
-        print ("score: {}".format(self.game.score))
+        print("score: {}".format(self.game.score))
         if self.game.won:
-            print ("gg")
-        elif not quit:
+            print("gg")
+        elif not quit_game:
             print("tu es une merde")
 
-
     def cell_choice(self, choice):
+        """
+        Retourne l'index de la cellule si valide, ou lance une exception sinon
+        """
         col = ord(choice[0]) - ord('A')
         try:
             line = int(choice[1:])-1
         except ValueError:
             raise InterfaceInputError()
         if 0 <= col < self.game.nb_col and 0 <= line < self.game.nb_line:
-                return line,col
+            return line, col
         else:
             raise InterfaceInputError()
 
     def disp_board(self):
-        print("   ",end="")
+        """Affiche le tableau"""
+        table = "   "
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
-            print ("  "+valeur+" ",end="")
-        print()
-        for i,line in enumerate(self.game.board):
-            print("   +" + "---+" * self.game.nb_col,end="")
-            print()
-            print("{:2d} | ".format(i+1),end="")
+            table += "  " + valeur + " "
+        table += "\n"
+        for i, line in enumerate(self.game.board):
+            table += "   +" + "---+" * self.game.nb_col + '\n'
+            table += "{:2d} | ".format(i+1)
             for cell in line:
-                print(cell+" | ", end="")
-            print(i+1)
-        print("   +" + "---+" * self.game.nb_col)
-        print("   ",end="")
+                table += cell + " | "
+            table += str(i+1) + "\n"
+        table += "   +" + "---+" * self.game.nb_col + "   \n"
+        table += '   '
         for valeur in string.ascii_uppercase[:self.game.nb_col]:
-            print ("  "+valeur+" ",end="")
-        print()
+            table += "  "+valeur+" "
+        print(table)
 
     def ask_set_up_game(self):
         """
         Demande à l'utilisateur le nombre de cases et le nombre de couleurs
         Tant que sa réponse n'est pas un entier recommencer
         """
-        nombres = ['nombre ligne','nombre de colonnes','nombre de couleur']
-        param = [0,0,0]
+        nombres = ['nombre ligne', 'nombre de colonnes', 'nombre de couleur']
+        param = [0, 0, 0]
         well_answered = False
         i = 0
         while not well_answered or i != len(nombres):
@@ -173,26 +187,34 @@ class TerminalInterface():
                 if 1 <= int_response:
                     well_answered = True
                     param[i] = int_response
-                    i+=1
+                    i += 1
         return param
 
-
     def load_game(self):
+        """
+        Affiche l'interface pour charger une partie et lance la partie select
+        """
         actions = [Answer(name, name) for name in glob.glob("saves/*.samegame")]
         if actions:
             actions.append(Answer(None, '*Ne pas charger de partie*'))
             f_path = self.ask("Quelle partie voulez-vous charger ?", actions)
             if f_path:
-                with open(f_path, 'rb') as f:
-                    self.game = pickle.load(f)
+                with open(f_path, 'rb') as save:
+                    self.game = pickle.load(save)
                 self.run_game()
         else:
             print("Il n'y a pas de parties à charger")
 
     def save_game(self, path):
-        with open('saves/' + path + '.samegame', "wb") as f:
-            pickle.dump(self.game, f)
+        """
+        Sauvegarde la partie actuelle dans un fichier `path`.samegame
+        """
+        with open('saves/' + path + '.samegame', "wb") as save:
+            pickle.dump(self.game, save)
 
     def display_help(self):
-        with open("help.txt") as f:
-            print (f.read())
+        """
+        Affiche l'aide du jeu.
+        """
+        with open("help.txt") as help_file:
+            print(help_file.read())

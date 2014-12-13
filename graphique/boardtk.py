@@ -1,3 +1,6 @@
+__author__ = 'François Gouet, Paul Ecoffet'
+
+
 from tkinter import *
 from game.errors import InvalidCellError, NotEnoughCellsError
 import tkinter.filedialog
@@ -8,102 +11,144 @@ from PIL import ImageTk
 
 
 class BoardFrame(Frame):
-
+    """
+    Board frame
+    """
     def __init__(self, interface, game):
         super().__init__(interface.root)
-        self.possible = {"B":ImageTk.PhotoImage(file="graphique/img/blue.png"),
-                         "O":ImageTk.PhotoImage(file="graphique/img/orange.png"),
-                         "A":ImageTk.PhotoImage(file="graphique/img/blurple.png"),
-                         "M":ImageTk.PhotoImage(file="graphique/img/yellow.png"),
-                         "V":ImageTk.PhotoImage(file="graphique/img/green.png"),
-                         "R":ImageTk.PhotoImage(file="graphique/img/red.png"),
+        self.possible = {"B": ImageTk.PhotoImage(file="graphique/img/blue.png"),
+                         "O": ImageTk.PhotoImage(file="graphique/img/orange.png"),
+                         "A": ImageTk.PhotoImage(file="graphique/img/blurple.png"),
+                         "M": ImageTk.PhotoImage(file="graphique/img/yellow.png"),
+                         "V": ImageTk.PhotoImage(file="graphique/img/green.png"),
+                         "R": ImageTk.PhotoImage(file="graphique/img/red.png"),
                          " ": PhotoImage(file="graphique/img/blank_big.gif")}
-        self.hover = {"B":ImageTk.PhotoImage(file="graphique/img/blue_h.png"),
-                      "O":ImageTk.PhotoImage(file="graphique/img/orange_h.png"),
-                      "A":ImageTk.PhotoImage(file="graphique/img/blurple_h.png"),
-                      "M":ImageTk.PhotoImage(file="graphique/img/yellow_h.png"),
-                      "V":ImageTk.PhotoImage(file="graphique/img/green_h.png"),
+        self.hover = {"B": ImageTk.PhotoImage(file="graphique/img/blue_h.png"),
+                      "O": ImageTk.PhotoImage(file="graphique/img/orange_h.png"),
+                      "A": ImageTk.PhotoImage(file="graphique/img/blurple_h.png"),
+                      "M": ImageTk.PhotoImage(file="graphique/img/yellow_h.png"),
+                      "V": ImageTk.PhotoImage(file="graphique/img/green_h.png"),
                       "R":ImageTk.PhotoImage(file="graphique/img/red_h.png"),
                       " ": PhotoImage(file="graphique/img/blank_big.gif")}
         self.interface = interface
         self.game = game
         self.highlighted_cells = []
         self.buttons = []
-        self.board = Frame(self, relief=SOLID, bg='black', border=2)
-        self.gen_buttons()
-        self.dispBoard()
-        self.board.pack(side=TOP, padx=5, pady=5)
-        self.score = Label(self, text="SCORE :" + str(self.game.score))
-        self.score.pack(side=TOP)
-        self.message = Label(self, text='', fg='red')
-        self.message.pack(side=TOP)
+        board = Frame(self, relief=SOLID, bg='black', border=2)
+        self.gen_board(board)
+        self.disp_board()
 
-        self.bottom_frame = Frame(self)
-        self.bottom_frame.pack(side=TOP, fill=BOTH)
+        messageframe = Frame(self, borderwidth=2)
+        self.score = Label(messageframe,
+                           text="SCORE : " + str(self.game.score),
+                           borderwidth=2, relief=GROOVE)
+        self.score.grid(column=0, row=0, sticky='nswe')
+        messageframe.columnconfigure(0, weight=1, uniform='messageframe')
+        self.message = Label(messageframe, text='', fg='red',
+                             borderwidth=2, relief=GROOVE)
+        self.message.grid(column=1, row=0, sticky='nswe')
+        messageframe.columnconfigure(1, weight=1, uniform='messageframe')
+        messageframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
 
-        self.back_to_menu_button = Button(self.bottom_frame, text='Retour menu', command=self.back_to_menu)
-        self.back_to_menu_button.pack(side=RIGHT)
+        board.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
 
-        self.save_game_button = Button(self.bottom_frame, text='Sauvegarder', command=self.save)
-        self.save_game_button.pack(side=LEFT)
+        bottom_frame = Frame(self)
+        bottom_frame.pack(side=TOP, fill=BOTH)
+        back_to_menu_button = Button(bottom_frame, text='Retour menu',
+                                     command=self.back_to_menu)
+        back_to_menu_button.pack(side=RIGHT, padx=5, pady=5)
+        self.save_game_button = Button(bottom_frame, text='Sauvegarder',
+                                       command=self.save)
+        self.save_game_button.pack(side=LEFT, padx=5, pady=5)
 
     def save(self):
+        """
+        Affiche une fenêtre pour sauvegarder la partie.
+        """
         if not self.game.can_play:
-            tkinter.messagebox.showerror('Impossible de sauvegarder', 'Vous ne pouvez pas sauvegarder une partie terminée')
+            tkinter.messagebox.showerror('Impossible de sauvegarder',
+                                         'Vous ne pouvez pas sauvegarder une partie terminée')
             return
-        f = tkinter.filedialog.asksaveasfile(mode='wb', initialdir='../saves', defaultextension='.samegame')
+        savefile = tkinter.filedialog.asksaveasfile(mode='wb', initialdir='../saves',
+                                                    defaultextension='.samegame')
         try:
-            pickle.dump(self.game, f)
-        except TypeError as e:
+            pickle.dump(self.game, savefile)
+        except TypeError:
             pass
         else:
             self.message['text'] = 'Partie sauvegardée #SWAG'
 
     def back_to_menu(self):
+        """
+        Change l'interface pour afficher l'écran de menu
+        """
         self.interface.switch_to_menu()
 
-    def cb_cell(self,cell):
+    def cb_cell(self, line, col):
+        """
+        callback lors du clic sur une cellule.
+
+        Clique sur la case dans la logique du jeu et met à jour le tableau.
+        """
         try:
-            self.game.click_on_cell(cell[0],cell[1])
-        except InvalidCellError as e:
-            self.message['text'] = str(e)
-        except  NotEnoughCellsError as e:
-            self.message['text'] = 'Pas assez de cases de même couleur'
+            self.game.click_on_cell(line, col)
+        except InvalidCellError:
+            self.message['text'] = 'Case vide'
+        except NotEnoughCellsError:
+            self.message['text'] = 'Pas assez de cases'
         else:
             self.message['text'] = ''
-        self.dispBoard()
+        self.disp_board()
 
-        if self.game.won:   
+        if self.game.won:
             self.message['text'] = "FELICITATION"
             self.deactivate_save()
         elif not self.game.can_play:
             self.message['text'] = "PARTIE FINIE"
             self.deactivate_save()
-        self.score['text'] = 'SCORE: ' + str(self.game.score)
+        self.score['text'] = 'SCORE : ' + str(self.game.score)
+        self.hover_cell(line, col)
 
     def deactivate_save(self):
+        """
+        Désactive le bouton de sauvegarde.
+
+        Appelée quand la partie est finie.
+        """
         self.save_game_button['state'] = DISABLED
 
     def hover_cell(self, line, col):
+        """
+        Surligne la cellule et les cellules de même couleur voisines.
+
+        Appelée lorsque le curseur est au dessus d'une cellule.
+        """
         self.clear_highlighted()
         to_highlight = self.game.get_same_nearby(line, col)
         for i, j in to_highlight:
             self.buttons[i][j]['image'] = self.hover[self.game.board[i][j]]
         self.highlighted_cells = to_highlight
 
-
     def clear_highlighted(self):
+        """
+        Supprime les cellules actuellement surlignées.
+        """
         for i, j in self.highlighted_cells:
             self.buttons[i][j]['image'] = self.possible[self.game.board[i][j]]
         self.highlighted_cells = []
 
-
-    def dispBoard(self):
+    def disp_board(self):
+        """
+        Met à jour le tableau depuis la logique du jeu.
+        """
         for line in range(self.game.nb_line):
             for col in range(self.game.nb_col):
                 self.buttons[line][col]['image'] = self.possible[self.game.board[line][col]]
 
-    def gen_buttons(self):
+    def gen_board(self, board):
+        """
+        Génère le plateau.
+        """
         if self.buttons:  # S'il y a des boutons, on nettoie
             for line in self.buttons:
                 for button in line:
@@ -117,3 +162,10 @@ class BoardFrame(Frame):
                 c.bind('<Leave>', lambda event: self.clear_highlighted())
                 self.buttons[line].append(c)
                 c.grid(column=col, row=line)
+                button = Button(board, borderwidth=0, bg='black',
+                                activebackground='black', relief=FLAT, padx=0, pady=0,
+                                command=lambda line=line, col=col: self.cb_cell(line, col))
+                button.bind('<Enter>', lambda event, line=line, col=col: self.hover_cell(line, col))
+                button.bind('<Leave>', lambda event: self.clear_highlighted())
+                self.buttons[line].append(button)
+                button.grid(column=col, row=line)

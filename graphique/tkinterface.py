@@ -1,6 +1,10 @@
+__author__ = 'François Gouet, Paul Ecoffet'
+
+
 from tkinter import *
 from graphique.menutk import MenuFrame
 from graphique.partieperso import PartiePerso
+
 
 class TkInterface(object):
 
@@ -10,6 +14,7 @@ class TkInterface(object):
         self.frame.pack(side=LEFT, fill=BOTH, expand=True)
         self.resize()
         self.root.resizable(False, False)
+        self.root.title('SameGame')
         self.root.mainloop()
 
     def switch_frame(self, frame_cls, *args, **kwargs):
@@ -19,7 +24,7 @@ class TkInterface(object):
         self.resize()
 
     def switch_to_menu(self):
-    	self.switch_frame(MenuFrame)
+        self.switch_frame(MenuFrame)
 
     def switch_to_perso(self):
         self.frame = PartiePerso(self)

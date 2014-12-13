@@ -7,14 +7,14 @@ from graphique.partieperso import PartiePerso
 
 class MenuFrame(Frame):
 
-    def __init__(self,interface):
+    def __init__(self, interface):
         self.interface = interface
         super().__init__(interface.root)
         for i in range(3):
             self.grid_columnconfigure(i,weight = 2,minsize=10)
             self.grid_rowconfigure(i,weight = 2,minsize=10)
         img = PhotoImage(file="graphique/img/beaugosse.gif")
-        lab_img = Label(self,image=img)
+        lab_img = Label(self, image=img)
         lab_img.image = img
         lab_img.grid(row=0,column=0,columnspan=3)
 
