@@ -154,15 +154,9 @@ class BoardFrame(Frame):
                 for button in line:
                     button.destroy()
         self.buttons = []
-        
         for line in range(self.game.nb_line):
             self.buttons.append([])
             for col in range(self.game.nb_col):
-                c = Button(board, borderwidth=0, bg='black', activebackground='black', relief=FLAT, padx=0, pady=0, command=lambda cell=(line,col): self.cb_cell(cell))
-                c.bind('<Enter>', lambda event, line=line, col=col: self.hover_cell(line, col))
-                c.bind('<Leave>', lambda event: self.clear_highlighted())
-                self.buttons[line].append(c)
-                c.grid(column=col, row=line)
                 button = Button(board, borderwidth=0, bg='black',
                                 activebackground='black', relief=FLAT, padx=0, pady=0,
                                 command=lambda line=line, col=col: self.cb_cell(line, col))
