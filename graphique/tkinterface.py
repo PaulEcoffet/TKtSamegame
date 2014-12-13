@@ -1,3 +1,6 @@
+__author__ = 'François Gouet, Paul Ecoffet'
+
+
 from tkinter import *
 from graphique.menutk import MenuFrame
 
@@ -20,7 +23,7 @@ class TkInterface(object):
         self.resize()
 
     def switch_to_menu(self):
-    	self.switch_frame(MenuFrame)
+        self.switch_frame(MenuFrame)
 
     def resize(self):
         self.root.update()
