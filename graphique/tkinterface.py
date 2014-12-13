@@ -1,5 +1,6 @@
 from tkinter import *
 from graphique.menutk import MenuFrame
+from graphique.partieperso import PartiePerso
 
 class TkInterface(object):
 
@@ -19,6 +20,10 @@ class TkInterface(object):
 
     def switch_to_menu(self):
     	self.switch_frame(MenuFrame)
+
+    def switch_to_perso(self):
+        self.frame = PartiePerso(self)
+        self.switch_frame(PartiePerso)
 
     def resize(self):
         self.root.update()
