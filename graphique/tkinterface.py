@@ -1,6 +1,7 @@
 from tkinter import *
 from graphique.menutk import MenuFrame
 
+
 class TkInterface(object):
 
     def __init__(self):
@@ -9,6 +10,7 @@ class TkInterface(object):
         self.frame.pack(side=LEFT, fill=BOTH, expand=True)
         self.resize()
         self.root.resizable(False, False)
+        self.root.title('SameGame')
         self.root.mainloop()
 
     def switch_frame(self, frame_cls, *args, **kwargs):
