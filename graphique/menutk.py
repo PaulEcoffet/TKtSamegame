@@ -4,6 +4,7 @@ from graphique.boardtk import BoardFrame
 import pickle
 import tkinter.filedialog
 from graphique.partieperso import PartiePerso
+from graphique.disp_score import BestScoreFrame
 
 class MenuFrame(Frame):
 
@@ -31,11 +32,15 @@ class MenuFrame(Frame):
         load_button.grid(row=3,column=2,sticky=W+N+S+E)
         load_button = Button(self,text="AIDE",command=self.help)
         load_button.grid(row=2,column=2,sticky=W+N+S+E)
+        best_scores_btn = Button(self,text="AFFICHER LES MEILLEURS SCORES",command=self.
+                                                                display_best_scores)
+        best_scores_btn.grid(row=1,column=2,sticky=W+N+S+E)
 
     def new_game(self,nb_lines,nb_col,nb_colors):
         game = SameGame(nb_lines,nb_col,nb_colors)
         self.interface.switch_frame(BoardFrame,game)
-
+    def display_best_scores(self):
+        disp_score = BestScoreFrame(self)
     def new_perso_game(self):
         new_perso_game = PartiePerso(self)
         

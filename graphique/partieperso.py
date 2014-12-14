@@ -12,7 +12,7 @@ class PartiePerso(Frame):
         self.mf = menuFrame
         new = Frame.__init__(self)
         new = Toplevel(self)
-        new.title("Demo 2")
+        new.title("Partie personnalisée")
         self.valid = False
         nb_line_label=Label(new,text="Nombre de lignes")
         nb_line_label.grid(row=1,column=0,sticky='NSWE')
@@ -45,7 +45,4 @@ class PartiePerso(Frame):
     def new_game(self):
         self.mf.new_game(self.nb_line.get(),self.nb_col.get(),self.nb_colors.get())
         self.destroy()
-    
-    def help(self):
-        pass
     
