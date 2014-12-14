@@ -2,6 +2,7 @@ import pickle
 import tkinter.filedialog
 import tkinter.messagebox
 from tkinter import *
+from PIL import ImageTk
 
 from game.samegame import SameGame
 from graphique.boardtk import BoardFrame
@@ -23,7 +24,7 @@ class MenuFrame(Frame):
         for i in range(2):
             self.grid_columnconfigure(i, weight=1, uniform="k")
             self.grid_rowconfigure(i, weight=1)
-        img = PhotoImage(file="graphique/img/beaugosse.gif")
+        img = ImageTk.PhotoImage(file="graphique/img/banner.png")
         lab_img = Label(self, image=img)
         lab_img.image = img
         lab_img.grid(row=0, column=0, columnspan=2)

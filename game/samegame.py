@@ -15,6 +15,7 @@ class SameGame():
     Crée un jeu de SameGame, seul l'aspect logique est géré ici
     """
     possible_colors = ["B", "O", "A", "M", "V", "R"]
+    min_to_delete = 2
 
     def __init__(self, nb_line, nb_col, nb_colors):
         self.score = 0
@@ -50,7 +51,7 @@ class SameGame():
                 break
             for j in range(self.nb_col):
                 if not visited[i][j] and self.board[i][j] != ' ':
-                    if len(self.get_same_nearby(i, j, visited)) >= 3:
+                    if len(self.get_same_nearby(i, j, visited)) >= SameGame.min_to_delete:
                         can_play = True
                         break
         return can_play
@@ -84,7 +85,7 @@ class SameGame():
             raise InvalidCellError('Can not click on empty cell')
         nearby = self.get_same_nearby(line, col)
         nb_same = len(nearby)
-        if nb_same < 2:
+        if nb_same < SameGame.min_to_delete:
             raise NotEnoughCellsError()
         self.remove_cells(nearby)
         self.adjust_board()
