@@ -103,7 +103,6 @@ class BoardFrame(Frame):
             self.message['text'] = 'Pas assez de cases'
         else:
             self.message['text'] = ''
-        self.disp_board()
         self.score['text'] = 'SCORE : ' + str(self.game.score)
         if not self.game.can_play:
             self.deactivate_save()
@@ -114,6 +113,7 @@ class BoardFrame(Frame):
             if not self.score_saved:
                 self.save_score()
                 self.score_saved = True
+        self.disp_board()
         self.hover_cell(line, col)
 
     def deactivate_save(self):
