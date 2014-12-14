@@ -3,6 +3,7 @@ from game.samegame import SameGame
 from graphique.boardtk import BoardFrame
 import pickle
 import tkinter.filedialog
+import tkinter.messagebox
 from graphique.partieperso import PartiePerso
 
 class MenuFrame(Frame):
@@ -11,23 +12,23 @@ class MenuFrame(Frame):
         self.interface = interface
         super().__init__(interface.root)
         for i in range(3):
-            self.grid_columnconfigure(i, weight = 2, minsize=10)
-            self.grid_rowconfigure(i, weight = 2, minsize=10)
+            self.grid_columnconfigure(i, weight=1, minsize=10)
+            self.grid_rowconfigure(i, weight=1, minsize=10)
         img = PhotoImage(file="graphique/img/beaugosse.gif")
         lab_img = Label(self, image=img)
         lab_img.image = img
         lab_img.grid(row=0, column=0, columnspan=3)
 
         easy = Button(self, text="PARTIE FACILE",
-                      command=lambda:self.new_game(4, 4, 2))
+                      command=lambda: self.new_game(4, 4, 2))
         easy.grid(row=1, column=0, columnspan=2, sticky='NSWE')
         medium = Button(self, text="PARTIE MOYENNE",
-                        command=lambda:self.new_game(8, 8, 4))
+                        command=lambda: self.new_game(8, 8, 4))
         medium.grid(row=2, column=0, columnspan=2, sticky='NSWE')
         hard = Button(self, text="PARTIE DIFFICILE",
-                      command=lambda:self.new_game(12, 12, 6))
+                      command=lambda: self.new_game(12, 12, 6))
         hard.grid(row=3, column=0, columnspan=2, sticky='NSWE')
-        
+
         new_game_button = Button(self, text="PARTIE PERSO",
                                  command=self.new_perso_game)
         new_game_button.grid(row=4, column=0, columnspan=2, sticky=W+N+S+E)
@@ -45,15 +46,20 @@ class MenuFrame(Frame):
         PartiePerso(self)
 
     def load_game(self):
-        try:
-            save = tkinter.filedialog.askopenfile(mode='rb',
-                                                  initialdir='saves/')
-            game = pickle.load(save)
-        except Exception as error:
-            print(error) # Show error
-        else:
-            if isinstance(game, SameGame):
-                self.interface.switch_frame(BoardFrame, game)
+        save = tkinter.filedialog.askopenfile(mode='rb',
+                                              initialdir='saves/')
+        if save:
+            try:
+                game = pickle.load(save)
+            except pickle.UnpicklingError:
+                tkinter.messagebox.showerror(
+                    'Fichier invalide', "Le fichier n'est pas du bon format.")
+            else:
+                if isinstance(game, SameGame):
+                    self.interface.switch_frame(BoardFrame, game)
+                else:
+                    tkinter.messagebox.showerror(
+                        'Fichier invalide', "Le fichier n'est pas du bon format.")
 
     def help(self):
         pass
