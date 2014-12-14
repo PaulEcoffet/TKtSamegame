@@ -28,7 +28,7 @@ class BoardFrame(Frame):
                       "A": ImageTk.PhotoImage(file="graphique/img/blurple_h.png"),
                       "M": ImageTk.PhotoImage(file="graphique/img/yellow_h.png"),
                       "V": ImageTk.PhotoImage(file="graphique/img/green_h.png"),
-                      "R":ImageTk.PhotoImage(file="graphique/img/red_h.png"),
+                      "R": ImageTk.PhotoImage(file="graphique/img/red_h.png"),
                       " ": PhotoImage(file="graphique/img/blank_big.gif")}
         self.interface = interface
         self.game = game
