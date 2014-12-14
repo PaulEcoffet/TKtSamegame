@@ -2,11 +2,12 @@ __author__ = 'François Gouet, Paul Ecoffet'
 
 
 from tkinter import *
+import tkinter.simpledialog
 from game.errors import InvalidCellError, NotEnoughCellsError
 import tkinter.filedialog
 import tkinter.messagebox
 import pickle
-from graphique.disp_score import BestScoreFrame
+from game.highscores import Highscores
 
 from PIL import ImageTk
 
@@ -35,6 +36,7 @@ class BoardFrame(Frame):
         self.game = game
         self.highlighted_cells = []
         self.buttons = []
+        self.score_saved = False
         board = Frame(self, relief=SOLID, bg='black', border=2)
         self.gen_board(board)
         self.disp_board()
@@ -72,12 +74,14 @@ class BoardFrame(Frame):
             return
         savefile = tkinter.filedialog.asksaveasfile(mode='wb', initialdir='../saves',
                                                     defaultextension='.samegame')
-        try:
-            pickle.dump(self.game, savefile)
-        except TypeError:
-            pass
-        else:
-            self.message['text'] = 'Partie sauvegardée #SWAG'
+        if savefile:
+            try:
+                pickle.dump(self.game, savefile)
+            except pickle.PicklingError:
+                tkinter.messagebox.showerror('Sauvegarde échouée',
+                                             'Impossible de sauvegarder votre partie')
+            else:
+                self.message['text'] = 'Partie sauvegardée #SWAG'
 
     def back_to_menu(self):
         """
@@ -100,15 +104,14 @@ class BoardFrame(Frame):
         else:
             self.message['text'] = ''
         self.disp_board()
-
-        if self.game.won:
-            self.message['text'] = "FELICITATION"
-            self.deactivate_save()
-            self.Score() # veify if self score is in the 10 best scores 
-        elif not self.game.can_play:
-            self.message['text'] = "PARTIE FINIE"
-            self.deactivate_save()
         self.score['text'] = 'SCORE : ' + str(self.game.score)
+        if not self.game.can_play:
+            self.deactivate_save()
+            if self.game.won:
+                self.message['text'] = "FELICITATION"
+            elif not self.game.can_play:
+                self.message['text'] = "PARTIE FINIE"
+            self.save_score()
         self.hover_cell(line, col)
 
     def deactivate_save(self):
@@ -167,25 +170,10 @@ class BoardFrame(Frame):
                 self.buttons[line].append(button)
                 button.grid(column=col, row=line)
 
-    def Score(self):
-        f = open("score.txt",mode='r')
-        deb = 3
-        line = self.getLine(f,deb)
-        line_split = line.split("-",3)
-        str_name = line_split[2]
-        str_score = line_split[3].split("-",3)
-        sco= str_score[3].split("-")
-        a = int(sco[0])
-        print(self.game.score)
-        try:
-            if self.game.score > int(sco[0]) :
-                score_modified = BestScoreFrame(self.game)
-        except:
-            pass
-        
-    def getLine(self,f,row):
-        for i in range(row-1):
-            f.readline()
-        line = f.readline()
-        return line
-            
+    def save_score(self):
+        highscores = Highscores('high.scores')
+        name = tkinter.simpledialog.askstring(
+            'Score', 'Veuillez entrer votre nom pour le classement')
+        if not name:
+            name = 'Anonyme'
+        highscores.add_score(name, self.game)
