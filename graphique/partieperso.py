@@ -1,6 +1,6 @@
 from tkinter import *
 from game.samegame import SameGame
-from graphique.boardtk import BoardFrame
+#from graphique.boardtk import BoardFrame
 
 
 import pickle

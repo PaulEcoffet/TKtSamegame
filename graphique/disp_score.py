@@ -9,26 +9,33 @@ import os.path
 
 class BestScoreFrame(Frame):
 
-    def __init__(self,menuFrame):
-        self.mf = menuFrame
-        new = Frame.__init__(self)
-        new = Toplevel(self)
-        new.title("Meilleurs scores")
-##        print("------------------------------------------------------------")
-##        SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-##        print("example 1: "+SITE_ROOT)
-##        PARENT_ROOT=os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
-##        print("example 2: "+PARENT_ROOT)
-##        GRANDPAPA_ROOT=os.path.abspath(os.path.join(PARENT_ROOT, os.pardir))
-##        print("example 3: "+GRANDPAPA_ROOT)
-##        print ("------------------------------------------------------------")
+    def __init__(self,frame,place):
+        self.bf = frame
+        self.place = place
+        self.new = Frame.__init__(self)
+        self.new = Toplevel(self)
+        self.new.title("Meilleurs scores")
+        self.actu()
+        self.disp()
+        e =Entry(self.new)
+        e.grid(row=0,column=0)
+        
+    def actu(self):
+            pass
+    def disp(self):
         f = open('score.txt','r')
-        #print(f)
-        #print(f.read())
-        #print(f.readline())
-        b=0
         data = f.read()
-        f.close()
-        Results = Label(new, text = data)
-        Results.grid(row = 1, column = 1)
-    
+        Results = Label(self.new, text = data)
+        Results.grid(row = 1, column = 0)
+        for i in range(10):
+           line = f.readlines()
+           #print(
+           r = Label(self.new,text=line)
+           r.grid(row=i,column =0 )
+
+##        b=0
+##        #data = f.read()
+##        f.close()
+##        for i in f.readlines():
+##            Results = Label(self.new, text = f.readline())
+##            Results.grid(row = b+1, column = 0)
