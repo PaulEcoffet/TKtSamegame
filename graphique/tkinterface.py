@@ -32,4 +32,5 @@ class TkInterface(object):
 
     def resize(self):
         self.root.update()
-        self.root.wm_geometry("{}x{}".format(self.root.winfo_reqwidth(), self.root.winfo_reqheight()))
+        self.root.wm_geometry("{}x{}".format(self.root.winfo_reqwidth(),
+                                             self.root.winfo_reqheight()))
