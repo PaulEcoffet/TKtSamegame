@@ -3,7 +3,6 @@ __author__ = 'François Gouet, Paul Ecoffet'
 
 from tkinter import *
 from graphique.menutk import MenuFrame
-from graphique.partieperso import PartiePerso
 
 
 class TkInterface(object):
@@ -26,10 +25,7 @@ class TkInterface(object):
     def switch_to_menu(self):
         self.switch_frame(MenuFrame)
 
-    def switch_to_perso(self):
-        self.frame = PartiePerso(self)
-        self.switch_frame(PartiePerso)
-
     def resize(self):
         self.root.update()
-        self.root.wm_geometry("{}x{}".format(self.root.winfo_reqwidth(), self.root.winfo_reqheight()))
+        self.root.wm_geometry("{}x{}".format(self.root.winfo_reqwidth(),
+                                             self.root.winfo_reqheight()))
