@@ -171,23 +171,18 @@ class BoardFrame(Frame):
         f = open("score.txt",mode='r')
         deb = 3
         line = self.getLine(f,deb)
-        print(line.split("-",3))
         line_split = line.split("-",3)
         str_name = line_split[2]
         str_score = line_split[3].split("-",3)
         sco= str_score[3].split("-")
-        print (sco[0])
         a = int(sco[0])
-        print(a)
         print(self.game.score)
         try:
             if self.game.score > int(sco[0]) :
-                score_modified = BestScoreFrame(self,deb)
+                score_modified = BestScoreFrame(self.game)
         except:
             pass
         
-        #print(f.readlines())
-
     def getLine(self,f,row):
         for i in range(row-1):
             f.readline()

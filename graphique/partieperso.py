@@ -32,7 +32,7 @@ class PartiePerso(Toplevel):
                                     to=len(SameGame.possible_colors))
         self.slider_nb_line.grid(row=3, column=1, sticky=W+N+S+E)
 
-        new_game_button = Button(new, text="NOUVELLE PARTIE",
+        new_game_button = Button(self, text="NOUVELLE PARTIE",
                                  command=self.new_game)
         new_game_button.grid(row=4, column=0, columnspan=2, sticky=W+N+S+E)
         self_game_button = Button(self, text="NOUVELLE PARTIE",
