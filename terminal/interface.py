@@ -129,7 +129,7 @@ class TerminalInterface():
                 except NotEnoughCellsError:
                     print("pas assez de cases")
                 except InvalidCellError:
-                    print("Vous ne pouvez supprimé une case vide")
+                    print("Vous ne pouvez supprimer une case vide")
         self.disp_board()
         print("score: {}".format(self.game.score))
         if not quit_game:
@@ -176,19 +176,21 @@ class TerminalInterface():
         Demande à l'utilisateur le nombre de cases et le nombre de couleurs
         Tant que sa réponse n'est pas un entier recommencer
         """
-        nombres = ['Nombre de lignes', 'Nombre de colonnes', 'Nombre de couleurs']
+        nombres = ['Combien de lignes', 'Combien de colonnes', 'Combien de couleurs']
         param = [0, 0, 0]
+        contraintes = [(6, 12), (6, 12), (2, 6)]
         well_answered = False
         i = 0
         while not well_answered or i != len(nombres):
-            print(nombres[i])
-            response = input('>')
+            print('{} (entre {} et {})'.format(nombres[i], contraintes[i][0],
+                                               contraintes[i][1]))
+            response = input('> ')
             try:
                 int_response = int(response)
             except ValueError:
                 pass
             else:
-                if 1 <= int_response:
+                if contraintes[i][0] <= int_response <= contraintes[i][1]:
                     well_answered = True
                     param[i] = int_response
                     i += 1

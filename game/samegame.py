@@ -84,7 +84,7 @@ class SameGame():
             raise InvalidCellError('Can not click on empty cell')
         nearby = self.get_same_nearby(line, col)
         nb_same = len(nearby)
-        if nb_same < 3:
+        if nb_same < 2:
             raise NotEnoughCellsError()
         self.remove_cells(nearby)
         self.adjust_board()

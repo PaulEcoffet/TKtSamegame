@@ -4,6 +4,9 @@ from game.samegame import SameGame
 
 
 class HighscoresFrame(Frame):
+    """
+    Écran affichant les meilleurs scores pour chaque configuration
+    """
 
     def __init__(self, interface):
         self.interface = interface
@@ -47,6 +50,9 @@ class HighscoresFrame(Frame):
         back_to_menu.pack(side=BOTTOM)
 
     def update_score(self, *args):
+        """
+        Met à jour la liste des score en fonction de la configuration choisie
+        """
         scores = self.highscores.get_scores(self.nb_line.get(), self.nb_col.get(),
                                             self.nb_colors.get())
         items = ['' for i in range(10)]

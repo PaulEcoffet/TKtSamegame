@@ -3,7 +3,9 @@ from game.samegame import SameGame
 
 
 class PartiePerso(Toplevel):
-
+    """
+    Fenêtre pour configurer une partie personnalisée.
+    """
     def __init__(self, menuFrame):
         super().__init__()
         self.menu = menuFrame
@@ -40,9 +42,9 @@ class PartiePerso(Toplevel):
         self_game_button.grid(row=4, column=0, columnspan=2, sticky=W+N+S+E)
 
     def new_game(self):
+        """
+        Déclenche une nouvelle partie avec la configuration sélectionnée.
+        """
         self.menu.new_game(self.nb_line.get(), self.nb_col.get(),
                            self.nb_colors.get())
         self.destroy()
-
-    def help(self):
-        pass

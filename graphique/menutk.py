@@ -7,10 +7,16 @@ from game.samegame import SameGame
 from graphique.boardtk import BoardFrame
 from graphique.partieperso import PartiePerso
 from graphique.highscorestk import HighscoresFrame
+from graphique.helptk import HelpWindow
 
 
 class MenuFrame(Frame):
+    """
+    Frame du menu principal
 
+    Le menu principal permet de lancer une nouvelle partie, consulter les
+    meilleurs scores, ou charger une partie existante.
+    """
     def __init__(self, interface):
         self.interface = interface
         super().__init__(interface.root)
@@ -46,13 +52,22 @@ class MenuFrame(Frame):
         help_button.grid(row=2, column=1, padx=10, pady=1, sticky='nswe')
 
     def new_game(self, nb_lines, nb_col, nb_colors):
+        """
+        Lance une nouvelle partie avec la configuration donnée en paramètre
+        """
         game = SameGame(nb_lines, nb_col, nb_colors)
         self.interface.switch_frame(BoardFrame, game)
 
     def new_perso_game(self):
+        """
+        Ouvre l'interface de paramètres personnalisés
+        """
         PartiePerso(self)
 
     def load_game(self):
+        """
+        Charge une partie et lance le frame de jeu.
+        """
         save = tkinter.filedialog.askopenfile(mode='rb',
                                               initialdir='saves/')
         if save:
@@ -69,4 +84,7 @@ class MenuFrame(Frame):
                         'Fichier invalide', "Le fichier n'est pas du bon format.")
 
     def help(self):
-        pass
+        """
+        Affiche l'aide du jeu dans une nouvelle fenêtre
+        """
+        HelpWindow()

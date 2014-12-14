@@ -173,6 +173,9 @@ class BoardFrame(Frame):
                 button.grid(column=col, row=line)
 
     def save_score(self):
+        """
+        Demande à l'utilisateur d'entrer son nom et sauvegarde son score
+        """
         highscores = Highscores('high.scores')
         name = tkinter.simpledialog.askstring(
             'Score', 'Veuillez entrer votre nom pour le classement')
