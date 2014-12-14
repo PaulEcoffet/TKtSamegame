@@ -9,6 +9,7 @@ from game.errors import NotEnoughCellsError, InvalidCellError
 import string
 import pickle
 import glob
+from game.highscores import Highscores
 
 
 class Answer:
@@ -63,6 +64,7 @@ class TerminalInterface():
             Answer(self.new_game, 'Nouvelle partie'),
             Answer(self.load_game, 'Charger une partie'),
             Answer(self.display_help, 'Afficher l\'aide'),
+            Answer(self.list_scores, 'Regarder les meilleurs scores'),
             Answer('quit', 'Quitter')
         ]
         answer = self.ask('Que souhaitez-vous faire ?', actions)
@@ -130,10 +132,12 @@ class TerminalInterface():
                     print("Vous ne pouvez supprimé une case vide")
         self.disp_board()
         print("score: {}".format(self.game.score))
-        if self.game.won:
-            print("gg")
-        elif not quit_game:
-            print("tu es une merde")
+        if not quit_game:
+            if self.game.won:
+                print("Impressionnant")
+            else:
+                print("Dommage")
+            self.save_score()
 
     def cell_choice(self, choice):
         """
@@ -172,7 +176,7 @@ class TerminalInterface():
         Demande à l'utilisateur le nombre de cases et le nombre de couleurs
         Tant que sa réponse n'est pas un entier recommencer
         """
-        nombres = ['nombre ligne', 'nombre de colonnes', 'nombre de couleur']
+        nombres = ['Nombre de lignes', 'Nombre de colonnes', 'Nombre de couleurs']
         param = [0, 0, 0]
         well_answered = False
         i = 0
@@ -218,3 +222,26 @@ class TerminalInterface():
         """
         with open("help.txt") as help_file:
             print(help_file.read())
+
+    def save_score(self):
+        """
+        Enregistre le score du joueur
+        """
+        highscores = Highscores('high.scores')
+        name = input('Veuillez entrer votre nom : ')
+        highscores.add_score(name, self.game)
+
+    def list_scores(self):
+        """Affiche les meilleurs scores"""
+        highscores = Highscores('high.scores')
+        print('Veuillez entrer la catégorie de score :')
+        param = self.ask_set_up_game()
+        scores = highscores.get_scores(*param)
+        print('*'*70)
+        if scores:
+            for i, score in enumerate(scores[:10]):
+                print(i+1, ':', score[0], '(', score[1], ')')
+        else:
+            print('Pas de score pour cette catégorie')
+        print('*'*70)
+        print()
