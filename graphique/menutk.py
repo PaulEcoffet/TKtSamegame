@@ -1,10 +1,13 @@
-from tkinter import *
-from game.samegame import SameGame
-from graphique.boardtk import BoardFrame
 import pickle
 import tkinter.filedialog
 import tkinter.messagebox
+from tkinter import *
+
+from game.samegame import SameGame
+from graphique.boardtk import BoardFrame
 from graphique.partieperso import PartiePerso
+from graphique.highscorestk import HighscoresFrame
+
 
 class MenuFrame(Frame):
 
@@ -20,7 +23,7 @@ class MenuFrame(Frame):
         lab_img.grid(row=0, column=0, columnspan=2)
 
         easy = Button(self, text="PARTIE FACILE",
-                      command=lambda: self.new_game(4, 4, 2))
+                      command=lambda: self.new_game(6, 6, 2))
         easy.grid(row=1, column=0, padx=10, pady=1, sticky='nswe')
         medium = Button(self, text="PARTIE MOYENNE",
                         command=lambda: self.new_game(8, 8, 4))
@@ -32,11 +35,15 @@ class MenuFrame(Frame):
         new_game_button = Button(self, text="PARTIE PERSO",
                                  command=self.new_perso_game)
         new_game_button.grid(row=4, column=0, padx=10, pady=1, sticky='nswe')
+
+        high_button = Button(self, text="HIGHSCORES",
+                             command=lambda: self.interface.switch_frame(HighscoresFrame))
+        high_button.grid(row=1, column=1, padx=10, pady=1, sticky='nswe')
         load_button = Button(self, text="CHARGER UNE PARTIE",
                              command=self.load_game)
         load_button.grid(row=3, column=1, padx=10, pady=1, sticky='nswe')
-        load_button = Button(self, text="AIDE", command=self.help)
-        load_button.grid(row=2, column=1, padx=10, pady=1, sticky='nswe')
+        help_button = Button(self, text="AIDE", command=self.help)
+        help_button.grid(row=2, column=1, padx=10, pady=1, sticky='nswe')
 
     def new_game(self, nb_lines, nb_col, nb_colors):
         game = SameGame(nb_lines, nb_col, nb_colors)
