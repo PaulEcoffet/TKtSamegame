@@ -111,7 +111,9 @@ class BoardFrame(Frame):
                 self.message['text'] = "FELICITATION"
             elif not self.game.can_play:
                 self.message['text'] = "PARTIE FINIE"
-            self.save_score()
+            if not self.score_saved:
+                self.save_score()
+                self.score_saved = True
         self.hover_cell(line, col)
 
     def deactivate_save(self):
