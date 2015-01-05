@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------
+                                     SAMEGAME
+-------------------------------------------------------------------------------
+Par Paul Ecoffet et François Gouet
+
+Le Samegame est un jeu de casse-tête. Le but est de supprimer les cases 
+adjacentes de mêmes couleur. S'il y a plus de deux cases adjacentes, vous 
+pouvez les supprimer. Plus vous supprimer de cases d'un coup, plus vous marquez
+de points !
+
+Un tableau avec beaucoup de couleurs différentes est plus difficile à terminer,
+bonne chance !
+
+
+En mode console :
+Vous pouvez sauvegarder en cours de partie en tapant `save` et quitter en tapant
+`exit`.

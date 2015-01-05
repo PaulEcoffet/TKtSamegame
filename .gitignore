@@ -55,3 +55,9 @@ target/
 
 # Rope
 .ropeproject
+
+# Project specific
+Thumbs.db
+saves/*
+high.scores
+
